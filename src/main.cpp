@@ -64,21 +64,28 @@ void wake_up_sim_module(void); // #5
  bool net_s = false;
 void setup() {
   // Set console baud rate
-  pinMode(PB12,OUTPUT);
-  digitalWrite(PB12,LOW);
-  delay(1000);
-  digitalWrite(PB12,HIGH);
-  delay(3000);
-  pinMode(PA1,OUTPUT);
-  digitalWrite(PA1,LOW);
-  delay(2000);
-
   SerialMon.begin(115200);
   delay(1000);
-
+  pinMode(PB12,OUTPUT);
+  digitalWrite(PB12,LOW);
+  SerialMon.println("PB12 LOW");
+  delay(1000);
+  digitalWrite(PB12,HIGH);
+  SerialMon.println("PB12 HIGH, powered on SIM7080G");
+  delay(3000);
+  pinMode(PA1,OUTPUT);
+  digitalWrite(PA1,HIGH);
+  SerialMon.println("PA1 HIGH");
+  delay(1000);
+  digitalWrite(PA1,LOW);
+  SerialMon.println("PA1 LOW : enable triggered");
+  delay(2000);
+  digitalWrite(PA1,HIGH);
+  SerialMon.println("PA1 HIGH . On ideal state");
   SerialMon.println("Wait...");
-  while(!net_s){
   initiate_sim_modlue();
+  while(!net_s){  
+
   net_s = connect_to_network_and_gprs();
   SerialMon.println("Network for GPRS not connected");
   SerialMon.println(net_s);
@@ -131,7 +138,7 @@ bool connect_to_network_and_gprs(void){
   while((millis()-st) < RETRY_TIMEOUT){
     if (!modem.waitForNetwork()) {
       SerialMon.print('.');
-      delay(100);
+      delay(1000);
       continue;
       // return false;
     }
