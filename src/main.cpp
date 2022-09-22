@@ -83,6 +83,7 @@ void setup() {
   digitalWrite(PA1,HIGH);
   SerialMon.println("PA1 HIGH . On ideal state");
   SerialMon.println("Wait...");
+  delay(5000);
   initiate_sim_modlue();
   while(!net_s){  
 
